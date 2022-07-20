@@ -1,7 +1,31 @@
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
 .App {
   text-align: center;
 }
+#root{
+height: 100vh;
+background: url("../public/background-2.jpg") no-repeat center center fixed;
+background-size: cover;
+}
 
+h1{
+  text-align: center;
+  margin: 0 auto 10px auto;
+  padding: 0;
+}
 .cell{
-  width: 7%;
+  width: 60px;
+  height: 60px;
+  margin: 5px 5px;
+}
+
+.board{
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto;
+  width: 50%;
+  margin: 0 auto 100px auto;
 }
