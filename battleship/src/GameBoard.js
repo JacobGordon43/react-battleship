@@ -17,14 +17,34 @@ const GameBoard = (props) => {
                 board[row][col] = {row: row, col: col}
             }
         }
-        console.log(board);
-        // board.map((row, col) => {console.log(row[0])})
+
+        const placeShip = (e) => {
+            if(props.selectedShip !== []){
+                console.log(props.selectedShip);
+                let cell = e.target;
+                let coordinates = cell.innerHTML;
+                let col = parseInt(coordinates[0]);
+                let row = parseInt(coordinates[3]);
+                // let length = parseInt(props.selectedShip.size);
+                console.log(Number.isNaN(props.selectedShip.size))
+                let rowCalculation = row + props.selectedShip.size;
+                if(rowCalculation > 9){
+                    console.log(row + " + " + props.selectedShip.size + " = " + rowCalculation)
+                    console.log("Can not place");
+                }else{
+                    console.log(row + " + " + props.selectedShip.size + " = " + rowCalculation)
+
+                    console.log("Can place")
+                }
+            }
+        }
+
+
         //Returns the game board, consisting of the title of the game, the board, and the cells. 
         //https://www.pluralsight.com/guides/display-multidimensional-array-data-in-react was used to help get this correct, as there was significant 
         //struggle getting it to work properly
     return (
     <div className="container">
-        <h1>Battleship</h1>
         <div className="board">
         {
 
@@ -34,7 +54,7 @@ const GameBoard = (props) => {
                 {row.map((xrow) => {
                     // console.log(xrow.row + " " + xrow.col)
                     return(
-                        <Cell row={xrow.row} col={xrow.col}/>
+                        <Cell row={xrow.row} col={xrow.col} onMouseOver={placeShip}/>
                     )
                 })}
                 </div>
