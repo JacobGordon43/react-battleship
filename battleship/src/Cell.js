@@ -1,10 +1,20 @@
 import React from "react";
 
 const Cell = (props) => {
-    // console.log(props.row)
-    const handleMouseOver = ()=>{
+    // console.log(.a)
+    const handleMouseOver = (e)=>{
         console.log("Mouse over");
+        console.log("Cell is " + props.valid)
+        props.onMouseOver(e);
     }
-    return (<button className="cell" onMouseOver={props.onMouseOver}>{props.row}, {props.col}</button>)
+    //A different return statement is offered for each status of the valid property
+    if(props.valid == "valid"){
+        return (<button className="cell valid" onMouseOver={handleMouseOver}>{props.row}, {props.col}</button>)
+    } else if(props.valid == "invalid"){
+        return (<button className="cell invalid" onMouseOver={handleMouseOver}>{props.row}, {props.col}</button>)
+
+    }else{
+        return (<button className="cell" onMouseOver={handleMouseOver}>{props.row}, {props.col}, {props.valid}</button>)
+    }
 }
 export default Cell;

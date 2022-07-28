@@ -2,40 +2,61 @@ import React, { useState } from "react";
 import Cell from "./Cell";
 const GameBoard = (props) => {
     //An empty array which will be used to store coordinates in
-    const board = [];
+    const [board, setBoard] = useState({cells:[]});
         //Used to initialize the board with
-        for(let row = 0; row < props.length; row++){
-            // console.log(board);
-            // console.log("Row" + row)
-            for(let col = 0; col < props.length; col++){
-                // console.log(row + "," + col);
-                //On the first column, it stores an array with a column value to initialize the column of coordinates
-                if(col == 0){
-                    board[row] = [{row: row, col: col}];
+        if(board.cells.length !== props.length*props.length){
+            for(let row = 0; row < props.length; row++){
+                // console.log(board);
+                // console.log("Row" + row)
+                for(let col = 0; col < props.length; col++){
+                    // console.log(row + "," + col);
+                    //On the first column, it stores an array with a column value to initialize the column of coordinates
+                    
+                    //Each column afterwards gets both points stored in the coresponding spot within the board
+                    if(board.cells.length < props.length*props.length){
+                    board.cells.push({coordinates: [{row: row, col: col}], valid: undefined});
+                    }else if (board.cells.length == props.length*props.length){
+                        console.log("Board successfully made")
+                    }
                 }
-                //Each column afterwards gets both points stored in the coresponding spot within the board
-                board[row][col] = {row: row, col: col}
             }
         }
+        
 
+
+        console.log(board.cells);
+        
+        const updateBoard = (validity) => {
+            let tempCells = [];
+
+            for(let x = 0; x < props.length; x++){
+                //Recreates the array but implements the validity argument to create an updated state for the board
+                for(let y = 0; y < props.length; y++){
+                    if(tempCells.length < props.length*props.length){
+                    tempCells.push({coordinates: [{row: x, col: y}], valid: validity});
+                    }
+                }
+            }
+//Sets the state of the board for the cell array to the new array, with the updated validity for the current selected ship
+            setBoard({...board, cells: tempCells});        
+        }
+        
         const placeShip = (e) => {
-            if(props.selectedShip !== []){
-                console.log(props.selectedShip);
+            if(props.selectedShip !== undefined){
                 let cell = e.target;
+                //Gets the coordinates and splits it between the row and col, which are available through the text of the buttons.
                 let coordinates = cell.innerHTML;
                 let col = parseInt(coordinates[0]);
                 let row = parseInt(coordinates[3]);
-                // let length = parseInt(props.selectedShip.size);
-                console.log(Number.isNaN(props.selectedShip.size))
+                //Calculates the amount of space left when adding the current row placement and the size of the ship
                 let rowCalculation = row + props.selectedShip.size;
-                if(rowCalculation > 9){
-                    console.log(row + " + " + props.selectedShip.size + " = " + rowCalculation)
-                    console.log("Can not place");
+                //A argument of valid or invalid will be passed into the updateBoard method based on if the calculation surpasses the length of the board
+                if(rowCalculation > props.length){
+                    updateBoard("invalid");
                 }else{
-                    console.log(row + " + " + props.selectedShip.size + " = " + rowCalculation)
-
-                    console.log("Can place")
+                    updateBoard("valid");
                 }
+                
             }
         }
 
@@ -48,20 +69,23 @@ const GameBoard = (props) => {
         <div className="board">
         {
 
-            board.map((row, col) => {
+            board.cells.map((cell) => {
                 return(
                     <div className="row">
-                {row.map((xrow) => {
-                    // console.log(xrow.row + " " + xrow.col)
-                    return(
-                        <Cell row={xrow.row} col={xrow.col} onMouseOver={placeShip}/>
-                    )
-                })}
-                </div>
+                        {
+                        cell.coordinates.map((coord)=>{
+                            return(
+                            <Cell row={coord.row} col={coord.col} valid={cell.valid} onMouseOver={placeShip}/>
+                            );
+                        }
+                        )
+                    }
+                    </div>
                 )
             })
         }
-    </div>
+        
+        </div>
     </div>
     )
 }

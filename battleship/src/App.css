@@ -49,3 +49,10 @@ h1{
 .ship{
   cursor: pointer;
 }
+
+.valid:hover{
+  background: green;
+}
+.invalid:hover{
+  background-color: red;
+}
