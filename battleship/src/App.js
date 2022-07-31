@@ -4,7 +4,22 @@ import GameBoard from './GameBoard';
 import ShipSelection from './ShipSelection';
 function App() {
 
-  const [selectedShip, selectShip] = useState([])
+  const [selectedShip, selectShip] = useState([]);
+
+  // const handleChangeDirection = (ship) => {
+  //   console.log("Handled");
+  //   if(ship !== undefined){
+  //     if(direction == "vertical"){
+  //       changeDirection("horizontal");
+  //     }else{
+  //       changeDirection("vertical");
+  //     }
+  //     console.log(direction);
+  //   }
+  //   if(direction == "vertical"){
+  //     changeDirection()
+  //   }
+  // }
   const onSelectShip = (ship) =>{
     selectShip(ship);
     console.log(ship);

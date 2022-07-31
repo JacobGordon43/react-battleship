@@ -50,9 +50,9 @@ h1{
   cursor: pointer;
 }
 
-.valid:hover{
+.valid{
   background: green;
 }
-.invalid:hover{
+.invalid  {
   background-color: red;
 }
