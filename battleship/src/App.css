@@ -12,25 +12,44 @@ background: url("../public/background-2.jpg") no-repeat center center fixed;
 background-size: cover;
 }
 
-h1{
+title{
   text-align: center;
   margin: 0 auto 10px auto;
   padding: 0;
+  font: 3em;
 }
+
 .cell{
   width: 60px;
   height: 60px;
   margin: 5px 5px;
 }
 
+.secondary-board-cell{
+  width: 20px;
+  height: 20px;
+  margin: 5px 5px;
+  background: rgb(214, 214, 214);
+}
+
 .board{
   display: grid;
+  /* grid-column: 1fr; */
   background: rgba(0, 0, 0, .5);
   grid-template-columns: auto auto auto auto auto auto auto auto auto;
   width: 50%;
   margin: 0 auto 50px auto;
 }
-
+.secondary-board { 
+  
+  width: 350px;
+  margin: 0;  
+}
+.secondary-board .cell{
+  width: 20px;
+  height: 20px;
+  font: 10px;
+}
 .ship-selection{
   align-items: center;
   justify-content: center;
@@ -45,6 +64,7 @@ h1{
   background: white;  
   margin: 10px auto;
 }
+
 
 .ship{
   cursor: pointer;

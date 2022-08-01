@@ -1,25 +1,24 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GameBoard from './GameBoard';
 import ShipSelection from './ShipSelection';
 function App() {
 
   const [selectedShip, selectShip] = useState([]);
-
-  // const handleChangeDirection = (ship) => {
-  //   console.log("Handled");
-  //   if(ship !== undefined){
-  //     if(direction == "vertical"){
-  //       changeDirection("horizontal");
-  //     }else{
-  //       changeDirection("vertical");
-  //     }
-  //     console.log(direction);
-  //   }
-  //   if(direction == "vertical"){
-  //     changeDirection()
-  //   }
-  // }
+  const [direction, changeDirection] = useState("row");
+  useEffect(()=>{
+    document.addEventListener('keydown', handleChangeDirection, true);
+  })
+  const handleChangeDirection = (e) => {
+    if(e.key === 'r'){
+      if(direction == "row"){
+        changeDirection("col")
+      }else{
+        changeDirection("row");
+      }
+      console.log(direction)
+    }
+  }
   const onSelectShip = (ship) =>{
     selectShip(ship);
     console.log(ship);
@@ -28,8 +27,9 @@ function App() {
   
   return(
   <div className="App">
-    <h1>Battleship</h1>
-  <GameBoard className="gameboard" length="9" selectedShip={selectedShip}/>
+    <h1 class="title">Battleship</h1>
+  <GameBoard className="gameboard" length="9" selectedShip={selectedShip} direction={direction} primary={true}/>
+  <GameBoard className="gameboard" length="9" primary={false}/>
   <ShipSelection className="ship-selection" onClick={onSelectShip}/>
   </div>
   )
