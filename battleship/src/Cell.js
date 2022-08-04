@@ -1,23 +1,34 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWater } from "@fortawesome/free-solid-svg-icons"
 
 const Cell = (props) => {
     const handleMouseOver = (e)=>{
         console.log("Mouse over");
         console.log("Cell is " + props.valid)
-        props.onMouseOver(e);
+        props.onMouseOver(e, props.row, props.col, false);
+    }
+    const handleOnClick = (e) =>{
+        console.log("In Cell");
+        console.log(props.occupied)
+        props.onClick(e, props.row, props.col, true);
+        console.log(props.onClick(e, props.row, props.col, true));
     }
     //A different return statement is offered for each status of the valid property
     if(props.primaryBoard == true){
-        if(props.valid == "valid"){
-            return (<button class="cell valid" onMouseOver={handleMouseOver}>{props.row}, {props.col}</button>)
+        if(props.occupied){
+            return (<div class="cell occupied" onMouseOver={handleMouseOver} onClick={handleOnClick}></div>)
+        }
+        else if(props.valid == "valid"){
+            return (<div class="cell valid" onMouseOver={handleMouseOver} onClick={handleOnClick}>{props.row}, {props.col}</div>)
         } else if(props.valid == "invalid"){
-            return (<button class="cell invalid" onMouseOver={handleMouseOver}>{props.row}, {props.col}</button>)
+            return (<div class="cell invalid" onMouseOver={handleMouseOver} onClick={handleOnClick}>{props.row}, {props.col}</div>)
     
         }else{
-            return (<button class="cell" onMouseOver={handleMouseOver}>{props.row}, {props.col}, {props.valid}</button>)
+            return (<div class="cell" onMouseOver={handleMouseOver} onClick={handleOnClick}><FontAwesomeIcon icon={faWater}></FontAwesomeIcon></div>)
         }
     }else{
-        return <div class="secondary-board-cell">{props.row}, {props.col}</div>
+        return <div class="secondary-board-cell"></div>
     }
 
 }

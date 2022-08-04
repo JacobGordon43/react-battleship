@@ -10,20 +10,20 @@ const ShipSelection = (props) => {
     }
     console.log(ships[0]);
     return(
-        <>
-        <h2>Select a ship</h2>
+        <div class="ship-container">
         <div className="ship-selection">
+            
             {
                 ships.map((ship)=>{
                     // console.log(ship)
                     return(
                         
-                        <Ship ship={ship} onClick={handleShipSelection}/>
+                        <Ship ship={ship} id={ship.id} onClick={handleShipSelection}/>
                     )
                 })
                 }
             </div>
-            </>
+            </div>
         )
     
 }

@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import GameBoard from './GameBoard';
 import ShipSelection from './ShipSelection';
+import PlayButton from './PlayButton';
 function App() {
 
   const [selectedShip, selectShip] = useState([]);
@@ -23,13 +24,22 @@ function App() {
     selectShip(ship);
     console.log(ship);
   }
-  console.log(selectedShip);
-  
+
+  const handleOnClick = (ship) => {
+    console.log(ship.id);
+    // selectedShip.pop(ship.id);
+  }
   return(
   <div className="App">
     <h1 class="title">Battleship</h1>
-  <GameBoard className="gameboard" length="9" selectedShip={selectedShip} direction={direction} primary={true}/>
-  <GameBoard className="gameboard" length="9" primary={false}/>
+    <div class="game-container">
+      <GameBoard className="gameboard" length="9" selectedShip={selectedShip} direction={direction} primary={true} onClick={handleOnClick}/>
+      <div class="left-section">
+        <GameBoard className="gameboard" length="9" primary={false}/>
+        <PlayButton className="play"/>
+      </div>
+    </div>
+
   <ShipSelection className="ship-selection" onClick={onSelectShip}/>
   </div>
   )
