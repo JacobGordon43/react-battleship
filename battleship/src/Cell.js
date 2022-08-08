@@ -4,15 +4,10 @@ import { faWater } from "@fortawesome/free-solid-svg-icons"
 
 const Cell = (props) => {
     const handleMouseOver = (e)=>{
-        console.log("Mouse over");
-        console.log("Cell is " + props.valid)
         props.onMouseOver(props.row, props.col, false);
     }
     const handleOnClick = (e) =>{
-        console.log("In Cell");
-        console.log(props.occupied)
         props.onClick(props.row, props.col, true);
-        console.log(props.onClick(props.row, props.col, true));
     }
     //A different return statement is offered for each status of the valid property
     if(props.primaryBoard == true){

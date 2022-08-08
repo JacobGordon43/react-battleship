@@ -7,7 +7,7 @@ const GameBoard = (props) => {
     // const [secondaryBoard, setSecondaryBoard] = useState({cells:[]});
 
         //Used to initialize the board with
-        if(board.cells.length !== props.length*props.length){
+        if(board.cells.length < props.length * props.length){
             for(let row = 0; row < props.length; row++){
                 // console.log(board);
                 // console.log("Row" + row)
@@ -23,6 +23,7 @@ const GameBoard = (props) => {
                     }
                 }
             }
+            console.log("New")
         }
         // board.cells[3].occupied = true;
         console.log(board.cells)
@@ -65,9 +66,10 @@ const GameBoard = (props) => {
                                 if(props.direction == "row"){
                                     console.log(validity);
                                     if(validity == "valid"){
-                                        console.log(validity)
+                                        // console.log(validity)
                                         if(clicked){
                                             tempCells.push({coordinates: [{row: effectedCells[index], col: y}], valid: validity, occupied: true, shipId: shipIndex});
+                                            props.onClick(true, shipIndex, clicked);
                                         }else{
                                             tempCells.push({coordinates: [{row: effectedCells[index], col: y}], valid: validity, occupied: board.cells[boardIndex].occupied, shipId: board.cells[boardIndex].shipId});
                                         }
@@ -83,9 +85,12 @@ const GameBoard = (props) => {
                                 }else{
                                     if(validity == "valid"){
                                         if(clicked){
-                                            tempCells.push({coordinates: [{row: x, col: effectedCells[index]}], valid: validity, occupied: true, shipId: props.shipId});
+                                            tempCells.push({coordinates: [{row: x, col: effectedCells[index]}], valid: validity, occupied: true, shipId: shipIndex});
+                                            // props.selectedShip = undefined;
+                                            props.onClick(true, shipIndex, clicked);
+
                                         }else{
-                                            tempCells.push({coordinates: [{row: x, col: effectedCells[index]}], valid: validity, occupied: board.cells[boardIndex].occupied, shipId: props.shipId});
+                                            tempCells.push({coordinates: [{row: x, col: effectedCells[index]}], valid: validity, occupied: board.cells[boardIndex].occupied, shipId: board.cells[boardIndex].shipId});
                                         }
                                     }else{
                                         tempCells.push({coordinates: [{row: x, col: effectedCells[index]}], valid: validity, occupied: board.cells[boardIndex].occupied, shipId: board.cells[boardIndex].shipId});
@@ -105,13 +110,11 @@ const GameBoard = (props) => {
                         }
                         boardIndex++;
                     }
-                    if(clicked){
-                        console.log(tempCells)
-                    }
                 }
                 //Sets the state of the board for the cell array to the new array, with the updated validity for the current selected ship
                 setBoard({...board, cells: tempCells});        
             }
+
             /**
              * 
              * @param {*} row The row of the cell that has been clicked
@@ -119,65 +122,66 @@ const GameBoard = (props) => {
              * @param {*} clicked A true/false value that is determined by whether the user clicks or hovers over a cell
              */
             const validateShip = (row, col, clicked) => {
-                if(props.selectedShip.size > 1){
-                    let effectedCells = props.direction == "row" ? [row] : [col];
-                    // let effectedCols = [col];
-                    let currentRow = row;
-                    let currentCol = col;
-                    let index = 0;
-                    let isNextOccupied = false;
-                    let calculation = props.direction == "row" ? row + props.selectedShip.size : col + props.selectedShip.size;
-                    //Goes through every cell that a ship will take
-                    while(index < props.selectedShip.size - 1){
-                        //If statement to determine if it is looking at row cells or col cells
-                        if(props.direction == "row"){
-                            let currentArrayIndex = (currentRow * 9) + col;
-                            //Checks to see if the current block within the ship will intersect with a cell that is currently occupied
-                            if(calculation < props.length){
-
-                                if(board.cells[currentArrayIndex + 9].occupied){
-                                    isNextOccupied = true;
+                if(props.selectedShip != undefined){
+                    if(props.selectedShip.size > 1){
+                        let effectedCells = props.direction == "row" ? [row] : [col];
+                        // let effectedCols = [col];
+                        let currentRow = row;
+                        let currentCol = col;
+                        let index = 0;
+                        let isNextOccupied = false;
+                        let calculation = props.direction == "row" ? row + props.selectedShip.size : col + props.selectedShip.size;
+                        //Goes through every cell that a ship will take
+                        while(index < props.selectedShip.size - 1){
+                            //If statement to determine if it is looking at row cells or col cells
+                            if(props.direction == "row"){
+                                let currentArrayIndex = (currentRow * 9) + col;
+                                //Checks to see if the current block within the ship will intersect with a cell that is currently occupied
+                                if(calculation <= props.length){
+                                    console.log("Leading to isNextOccupied")
+                                    if(board.cells[currentArrayIndex + 9].occupied){
+                                        isNextOccupied = true;
+                                    }
                                 }
-                            }
-                            //Goes to the next row in the array and places it into the effectedCells array, which will be passed into the updateBoard method.
-                            //The index is then incremented to indicate that another block within the ship has been checked
-                            currentRow++;
-                            effectedCells.push(currentRow);
-                            index++;
-                        }else{
-                            //This block of code runs the the same logic as the previous one, but it checks for the col direction
-                            let currentArrayIndex = (row * 9) + col;
-                            if(calculation < props.length){
-                                if(board.cells[currentArrayIndex + currentCol].occupied){
-                                    isNextOccupied = true;
+                                //Goes to the next row in the array and places it into the effectedCells array, which will be passed into the updateBoard method.
+                                //The index is then incremented to indicate that another block within the ship has been checked
+                                currentRow++;
+                                effectedCells.push(currentRow);
+                                index++;
+                            }else{
+                                //This block of code runs the the same logic as the previous one, but it checks for the col direction
+                                let currentArrayIndex = (row * 9) + currentCol;
+                                if(calculation <= props.length){
+                                    if(board.cells[currentArrayIndex + 1].occupied){
+                                        isNextOccupied = true;
+                                    }
                                 }
-                            }
-
-                            currentCol++;
-                            effectedCells.push(currentCol);
-                            console.log(effectedCells);
-                            index++;
-                        }
-                    }
-                        //Places all the row values that will be validated in the updated board
-
-                        //Calculates the amount of space left when adding the current row placement and the size of the ship
-                        //A argument of valid or invalid will be passed into the updateBoard method based on if the calculation surpasses the length of the board
-                        if(isNextOccupied){
-                            updateBoard(row, col, props.selectedShip.size, "invalid", effectedCells, clicked, props.selectedShip.id);
-                        }else{
-                            if(calculation > props.length){      
+                                console.log(currentCol);
+                                currentCol++;
+                                effectedCells.push(currentCol);
                                 console.log(effectedCells);
+                                index++;
+                            }
+                        }
+                            //Places all the row values that will be validated in the updated board
+    
+                            //Calculates the amount of space left when adding the current row placement and the size of the ship
+                            //A argument of valid or invalid will be passed into the updateBoard method based on if the calculation surpasses the length of the board
+                            if(isNextOccupied){
                                 updateBoard(row, col, props.selectedShip.size, "invalid", effectedCells, clicked, props.selectedShip.id);
                             }else{
-                                console.log(effectedCells);
-                                updateBoard(row, col, props.selectedShip.size, "valid", effectedCells, clicked, props.selectedShip.id);
-                            }       
-                        }
-             
-                   
-                    props.onClick(props.selectedShip.id);
+                                if(calculation > props.length){      
+                                    console.log(effectedCells);
+                                    updateBoard(row, col, props.selectedShip.size, "invalid", effectedCells, clicked, props.selectedShip.id);
+                                }else{
+                                    console.log(effectedCells);
+                                    updateBoard(row, col, props.selectedShip.size, "valid", effectedCells, clicked, props.selectedShip.id);
+                                }       
+                            }
+                        props.onClick(props.selectedShip.id);
+                    }
                 }
+
             }
     
             //Returns the game board, consisting of the title of the game, the board, and the cells. 

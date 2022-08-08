@@ -5,7 +5,7 @@ import ShipSelection from './ShipSelection';
 import PlayButton from './PlayButton';
 function App() {
 
-  const [selectedShip, selectShip] = useState([]);
+  const [selectedShip, selectShip] = useState();
   const [direction, changeDirection] = useState("row");
   useEffect(()=>{
     document.addEventListener('keydown', handleChangeDirection, true);
@@ -24,11 +24,17 @@ function App() {
     selectShip(ship);
     console.log(ship);
   }
-
-  const handleOnClick = (ship) => {
-    console.log(ship.id);
-    // selectedShip.pop(ship.id);
+//Resets the selected ship when a ship is placed down
+  const handleOnClick = (placedShip, shipId, clicked) => { 
+    if(clicked){
+      selectShip();
+    }
   }
+  //Sets the game mode to playing
+  const play = () => {
+    console.log("Play");
+  }
+  
   return(
   <div className="App">
     <h1 class="title">Battleship</h1>
@@ -36,11 +42,10 @@ function App() {
       <GameBoard className="gameboard" length="9" selectedShip={selectedShip} direction={direction} primary={true} onClick={handleOnClick}/>
       <div class="left-section">
         <GameBoard className="gameboard" length="9" primary={false}/>
-        <PlayButton className="play"/>
       </div>
     </div>
 
-  <ShipSelection className="ship-selection" onClick={onSelectShip}/>
+  <ShipSelection className="ship-selection" selectedShip={selectedShip} onClick={onSelectShip}/> 
   </div>
   )
 }
